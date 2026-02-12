@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F_0</title>
+    <title>F_0 is a </title>
     <style>
         * {
             margin: 0;
@@ -107,13 +107,17 @@
             
             if (!isDeleting && charIndex < currentText.length) {
                 if (elapsed >= typeSpeed) {
-                    dynamicTextElement.textContent = currentText.substring(0, charIndex + 1);
+                    const displayText = currentText.substring(0, charIndex + 1);
+                    dynamicTextElement.textContent = displayText;
+                    document.title = 'F_0 is a ' + displayText;
                     charIndex++;
                     lastUpdateTime = currentTime;
                 }
             } else if (isDeleting && charIndex > 0) {
                 if (elapsed >= deleteSpeed) {
-                    dynamicTextElement.textContent = currentText.substring(0, charIndex - 1);
+                    const displayText = currentText.substring(0, charIndex - 1);
+                    dynamicTextElement.textContent = displayText;
+                    document.title = 'F_0 is a ' + displayText;
                     charIndex--;
                     lastUpdateTime = currentTime;
                 }
@@ -126,6 +130,7 @@
                 if (elapsed >= pauseBeforeType) {
                     isDeleting = false;
                     currentText = getNextWord();
+                    document.title = 'F_0 is a ';
                     lastUpdateTime = currentTime;
                 }
             }
@@ -135,6 +140,7 @@
 
         // Initialize
         currentText = getNextWord();
+        document.title = 'F_0 is a ';
         requestAnimationFrame(typeWriter);
     </script>
 </body>
