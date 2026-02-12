@@ -111,7 +111,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
             transform-style: preserve-3d;
             perspective: 1000px;
         }
@@ -119,6 +118,7 @@
         .image-container:hover {
             box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
             border-color: rgba(0, 255, 136, 0.3);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
         .side-image {
@@ -243,10 +243,12 @@
             const rotateX = (y - centerY) / centerY * -10;
             const rotateY = (x - centerX) / centerX * 10;
             
+            imageContainer.style.transition = 'none';
             imageContainer.style.transform = `translateY(-50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
         
         imageContainer.addEventListener('mouseleave', () => {
+            imageContainer.style.transition = 'transform 0.3s ease';
             imageContainer.style.transform = 'translateY(-50%) rotateX(0deg) rotateY(0deg)';
         });
     </script>
