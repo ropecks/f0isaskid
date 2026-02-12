@@ -79,7 +79,7 @@
         let isDeleting = false;
         let currentText = '';
         let charIndex = 0;
-        let lastUpdateTime = 0;
+        let pauseCounter = 0;
         const typeSpeed = 100;
         const deleteSpeed = 50;
         const pauseBeforeDelete = 2000;
@@ -113,57 +113,61 @@
             }
         });
 
-        function typeWriter(currentTime) {
-            const elapsed = currentTime - lastUpdateTime;
-            
+        function updateAnimation() {
             if (!isDeleting && charIndex < currentText.length) {
-                if (elapsed >= typeSpeed) {
-                    const displayText = currentText.substring(0, charIndex + 1);
-                    // Always update title
-                    document.title = 'F_0 is a ' + displayText;
-                    // Only update page content if tab is visible
-                    if (isTabVisible) {
-                        dynamicTextElement.textContent = displayText;
-                    }
-                    charIndex++;
-                    lastUpdateTime = currentTime;
+                // Typing
+                const displayText = currentText.substring(0, charIndex + 1);
+                document.title = 'F_0 is a ' + displayText;
+                if (isTabVisible) {
+                    dynamicTextElement.textContent = displayText;
                 }
+                charIndex++;
+                pauseCounter = 0;
             } else if (isDeleting && charIndex > 0) {
-                if (elapsed >= deleteSpeed) {
-                    const displayText = currentText.substring(0, charIndex - 1);
-                    // Always update title
-                    document.title = 'F_0 is a ' + displayText;
-                    // Only update page content if tab is visible
-                    if (isTabVisible) {
-                        dynamicTextElement.textContent = displayText;
-                    }
-                    charIndex--;
-                    lastUpdateTime = currentTime;
+                // Deleting
+                const displayText = currentText.substring(0, charIndex - 1);
+                document.title = 'F_0 is a ' + displayText;
+                if (isTabVisible) {
+                    dynamicTextElement.textContent = displayText;
                 }
+                charIndex--;
+                pauseCounter = 0;
             } else if (!isDeleting && charIndex === currentText.length) {
-                if (elapsed >= pauseBeforeDelete) {
+                // Pause before deleting
+                pauseCounter += 50;
+                if (pauseCounter >= pauseBeforeDelete) {
                     isDeleting = true;
-                    lastUpdateTime = currentTime;
+                    pauseCounter = 0;
                 }
             } else if (isDeleting && charIndex === 0) {
-                if (elapsed >= pauseBeforeType) {
+                // Pause before next word
+                pauseCounter += 50;
+                if (pauseCounter >= pauseBeforeType) {
                     isDeleting = false;
                     currentText = getNextWord();
                     document.title = 'F_0 is a ';
                     if (isTabVisible) {
                         dynamicTextElement.textContent = '';
                     }
-                    lastUpdateTime = currentTime;
+                    pauseCounter = 0;
                 }
             }
-            
-            requestAnimationFrame(typeWriter);
         }
+
+        // Use setInterval for continuous updates (works even when tab is hidden)
+        setInterval(function() {
+            if (!isDeleting && charIndex < currentText.length) {
+                updateAnimation();
+            } else if (isDeleting && charIndex > 0) {
+                updateAnimation();
+            } else {
+                updateAnimation();
+            }
+        }, 50);
 
         // Initialize
         currentText = getNextWord();
         document.title = 'F_0 is a ';
-        requestAnimationFrame(typeWriter);
     </script>
 </body>
 </html>
