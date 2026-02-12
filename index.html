@@ -240,16 +240,16 @@
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const rotateX = (y - centerY) / centerY * -10;
-            const rotateY = (x - centerX) / centerX * 10;
+            const rotateX = (y - centerY) / centerY * -20;
+            const rotateY = (x - centerX) / centerX * 20;
             
             imageContainer.style.transition = 'none';
-            imageContainer.style.transform = `translateY(-50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            imageContainer.style.transform = `translateY(-50%) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
         
         imageContainer.addEventListener('mouseleave', () => {
             imageContainer.style.transition = 'transform 0.3s ease';
-            imageContainer.style.transform = 'translateY(-50%) rotateX(0deg) rotateY(0deg)';
+            imageContainer.style.transform = 'translateY(-50%) perspective(1000px) rotateX(0deg) rotateY(0deg)';
         });
     </script>
 </body>
