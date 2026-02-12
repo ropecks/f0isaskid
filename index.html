@@ -111,6 +111,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .image-container:hover {
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
+            border-color: rgba(0, 255, 136, 0.3);
         }
 
         .side-image {
@@ -220,6 +228,27 @@
         currentText = getNextWord();
         document.title = 'F_0 is a ';
         requestAnimationFrame(typeWriter);
+
+        // 3D tilt effect for image container
+        const imageContainer = document.querySelector('.image-container');
+        
+        imageContainer.addEventListener('mousemove', (e) => {
+            const rect = imageContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / centerY * -10;
+            const rotateY = (x - centerX) / centerX * 10;
+            
+            imageContainer.style.transform = `translateY(-50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        
+        imageContainer.addEventListener('mouseleave', () => {
+            imageContainer.style.transform = 'translateY(-50%) rotateX(0deg) rotateY(0deg)';
+        });
     </script>
 </body>
 </html>
