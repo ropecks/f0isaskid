@@ -79,13 +79,12 @@
         let isDeleting = false;
         let currentText = '';
         let charIndex = 0;
-        let lastUpdateTime = Date.now();
+        let lastUpdateTime = 0;
         const typeSpeed = 100;
         const deleteSpeed = 50;
         const pauseBeforeDelete = 2000;
         const pauseBeforeType = 500;
         const dynamicTextElement = document.getElementById('dynamic-text');
-        let isTabVisible = !document.hidden;
 
         function shuffleArray(array) {
             const newArray = [...array];
@@ -103,68 +102,81 @@
             return shuffledWords.shift();
         }
 
-        // Listen for tab visibility changes
-        document.addEventListener('visibilitychange', function() {
-            isTabVisible = !document.hidden;
-            if (isTabVisible) {
-                // Sync the page content with the title when tab becomes visible
-                const currentDisplay = document.title.replace('F_0 is a ', '');
-                dynamicTextElement.textContent = currentDisplay;
-            }
-        });
-
-        function updateAnimation() {
-            const currentTime = Date.now();
+        function updateContent(currentTime) {
             const elapsed = currentTime - lastUpdateTime;
-
+            
             if (!isDeleting && charIndex < currentText.length) {
-                // Typing
                 if (elapsed >= typeSpeed) {
                     const displayText = currentText.substring(0, charIndex + 1);
+                    dynamicTextElement.textContent = displayText;
                     document.title = 'F_0 is a ' + displayText;
-                    if (isTabVisible) {
-                        dynamicTextElement.textContent = displayText;
-                    }
                     charIndex++;
                     lastUpdateTime = currentTime;
                 }
             } else if (isDeleting && charIndex > 0) {
-                // Deleting
                 if (elapsed >= deleteSpeed) {
                     const displayText = currentText.substring(0, charIndex - 1);
+                    dynamicTextElement.textContent = displayText;
                     document.title = 'F_0 is a ' + displayText;
-                    if (isTabVisible) {
-                        dynamicTextElement.textContent = displayText;
-                    }
                     charIndex--;
                     lastUpdateTime = currentTime;
                 }
             } else if (!isDeleting && charIndex === currentText.length) {
-                // Pause before deleting
                 if (elapsed >= pauseBeforeDelete) {
                     isDeleting = true;
                     lastUpdateTime = currentTime;
                 }
             } else if (isDeleting && charIndex === 0) {
-                // Pause before next word
                 if (elapsed >= pauseBeforeType) {
                     isDeleting = false;
                     currentText = getNextWord();
                     document.title = 'F_0 is a ';
-                    if (isTabVisible) {
-                        dynamicTextElement.textContent = '';
-                    }
+                    dynamicTextElement.textContent = '';
                     lastUpdateTime = currentTime;
                 }
             }
+            
+            requestAnimationFrame(updateContent);
         }
 
-        // Use setInterval for continuous updates (works even when tab is hidden)
-        setInterval(updateAnimation, 20);
+        // Separate interval for title updates when page is hidden
+        setInterval(function() {
+            if (document.hidden) {
+                const currentTime = performance.now();
+                const elapsed = currentTime - lastUpdateTime;
+                
+                if (!isDeleting && charIndex < currentText.length && elapsed >= typeSpeed) {
+                    const displayText = currentText.substring(0, charIndex + 1);
+                    document.title = 'F_0 is a ' + displayText;
+                    charIndex++;
+                    lastUpdateTime = currentTime;
+                } else if (isDeleting && charIndex > 0 && elapsed >= deleteSpeed) {
+                    const displayText = currentText.substring(0, charIndex - 1);
+                    document.title = 'F_0 is a ' + displayText;
+                    charIndex--;
+                    lastUpdateTime = currentTime;
+                } else if (!isDeleting && charIndex === currentText.length && elapsed >= pauseBeforeDelete) {
+                    isDeleting = true;
+                    lastUpdateTime = currentTime;
+                } else if (isDeleting && charIndex === 0 && elapsed >= pauseBeforeType) {
+                    isDeleting = false;
+                    currentText = getNextWord();
+                    document.title = 'F_0 is a ';
+                    lastUpdateTime = currentTime;
+                }
+            } else {
+                // Sync page content when tab becomes visible
+                const currentDisplay = document.title.replace('F_0 is a ', '');
+                if (dynamicTextElement.textContent !== currentDisplay) {
+                    dynamicTextElement.textContent = currentDisplay;
+                }
+            }
+        }, 50);
 
         // Initialize
         currentText = getNextWord();
         document.title = 'F_0 is a ';
+        requestAnimationFrame(updateContent);
     </script>
 </body>
 </html>
