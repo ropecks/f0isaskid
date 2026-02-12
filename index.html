@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F_0 is a </title>
+    <link rel="icon" type="image/png" href="icon.png">
     <style>
         * {
             margin: 0;
@@ -55,15 +56,26 @@
             box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
         }
 
-        .text-display {
+        .content-container {
             position: absolute;
             top: 120px;
             left: 40px;
+            background: rgba(50, 50, 50, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+        }
+
+        .text-display {
             font-size: 48px;
             font-weight: 300;
             letter-spacing: 2px;
             display: flex;
             align-items: center;
+            margin-bottom: 20px;
         }
 
         .typed-text {
@@ -78,6 +90,14 @@
             margin-left: 5px;
             animation: blink 0.7s infinite;
             vertical-align: middle;
+        }
+
+        .subheader {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #b0b0b0;
+            margin-top: 10px;
         }
 
         @keyframes blink {
@@ -97,9 +117,14 @@
         <button class="nav-button">Proof</button>
     </div>
 
-    <div class="text-display">
-        <span class="typed-text">F_0 is a <span id="dynamic-text"></span></span>
-        <span class="cursor"></span>
+    <div class="content-container">
+        <div class="text-display">
+            <span class="typed-text">F_0 is a <span id="dynamic-text"></span></span>
+            <span class="cursor"></span>
+        </div>
+        <div class="subheader">
+            F_0 is a very large man, and is often described as one of the largest human beings on planet Earth. He's been involved in skidding Gorilla Tag mod menus, and always declines these true allegations. Check the categories on the top bar for more information.
+        </div>
     </div>
 
     <script>
