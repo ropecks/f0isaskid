@@ -117,8 +117,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transform-style: preserve-3d;
-            perspective: 1000px;
             display: none;
         }
 
@@ -156,6 +154,17 @@
             font-size: 18px;
             line-height: 1.6;
             color: #e0e0e0;
+        }
+
+        .about-content a {
+            color: #4a9eff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .about-content a:hover {
+            color: #6eb5ff;
+            text-decoration: underline;
         }
 
         .info-content {
@@ -196,12 +205,12 @@
             <span class="cursor"></span>
         </div>
         <div class="subheader">
-            F_0 is a very large man, and is often described as one of the largest human beings on planet Earth. He's been involved in skidding Gorilla Tag mod menus, and always declines these true allegations. Check the categories on the top bar for more information.
+            F_0 is a very large man, and is often described as one of the largest human beings on planet Earth. He's been involved in skidding Gorilla Tag mod menus, and always declines true skidding allegations that rise upon him. Check the categories on the top bar for more information.
         </div>
     </div>
 
     <div class="about-content">
-        <p>This website 'https://f0isaskid.xyz/' was made by Ropex, and is found on platforms like YouTube, TikTok, and Discord. This website is all about clowning a person called 'F_0' who is known for skidding other peoples Gorilla Tag mod menus and acts like he can crack.</p>
+        <p>This website '<a href="https://f0isaskid.xyz/" target="_blank">https://f0isaskid.xyz/</a>' was made by Ropex, and is found on platforms like YouTube, TikTok, and Discord. This website is all about clowning a person called 'F_0' who is known for skidding other peoples Gorilla Tag mod menus and acts like he can crack.</p>
     </div>
 
     <div class="image-container active">
@@ -313,35 +322,6 @@
             imageContainer.classList.remove('active');
         });
 
-        // 3D tilt effect for image container
-        let isHovering = false;
-        
-        imageContainer.addEventListener('mouseenter', () => {
-            isHovering = true;
-        });
-        
-        imageContainer.addEventListener('mousemove', (e) => {
-            if (!isHovering) return;
-            
-            const rect = imageContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / centerY * -20;
-            const rotateY = (x - centerX) / centerX * 20;
-            
-            imageContainer.style.transition = 'none';
-            imageContainer.style.transform = `translateY(-50%) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        
-        imageContainer.addEventListener('mouseleave', () => {
-            isHovering = false;
-            imageContainer.style.transition = 'transform 0.3s ease';
-            imageContainer.style.transform = 'translateY(-50%) perspective(1000px) rotateX(0deg) rotateY(0deg)';
-        });
     </script>
 </body>
 </html>
