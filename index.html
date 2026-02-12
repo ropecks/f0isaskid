@@ -79,7 +79,7 @@
         let isDeleting = false;
         let currentText = '';
         let charIndex = 0;
-        let pauseCounter = 0;
+        let lastUpdateTime = Date.now();
         const typeSpeed = 100;
         const deleteSpeed = 50;
         const pauseBeforeDelete = 2000;
@@ -114,56 +114,53 @@
         });
 
         function updateAnimation() {
+            const currentTime = Date.now();
+            const elapsed = currentTime - lastUpdateTime;
+
             if (!isDeleting && charIndex < currentText.length) {
                 // Typing
-                const displayText = currentText.substring(0, charIndex + 1);
-                document.title = 'F_0 is a ' + displayText;
-                if (isTabVisible) {
-                    dynamicTextElement.textContent = displayText;
+                if (elapsed >= typeSpeed) {
+                    const displayText = currentText.substring(0, charIndex + 1);
+                    document.title = 'F_0 is a ' + displayText;
+                    if (isTabVisible) {
+                        dynamicTextElement.textContent = displayText;
+                    }
+                    charIndex++;
+                    lastUpdateTime = currentTime;
                 }
-                charIndex++;
-                pauseCounter = 0;
             } else if (isDeleting && charIndex > 0) {
                 // Deleting
-                const displayText = currentText.substring(0, charIndex - 1);
-                document.title = 'F_0 is a ' + displayText;
-                if (isTabVisible) {
-                    dynamicTextElement.textContent = displayText;
+                if (elapsed >= deleteSpeed) {
+                    const displayText = currentText.substring(0, charIndex - 1);
+                    document.title = 'F_0 is a ' + displayText;
+                    if (isTabVisible) {
+                        dynamicTextElement.textContent = displayText;
+                    }
+                    charIndex--;
+                    lastUpdateTime = currentTime;
                 }
-                charIndex--;
-                pauseCounter = 0;
             } else if (!isDeleting && charIndex === currentText.length) {
                 // Pause before deleting
-                pauseCounter += 50;
-                if (pauseCounter >= pauseBeforeDelete) {
+                if (elapsed >= pauseBeforeDelete) {
                     isDeleting = true;
-                    pauseCounter = 0;
+                    lastUpdateTime = currentTime;
                 }
             } else if (isDeleting && charIndex === 0) {
                 // Pause before next word
-                pauseCounter += 50;
-                if (pauseCounter >= pauseBeforeType) {
+                if (elapsed >= pauseBeforeType) {
                     isDeleting = false;
                     currentText = getNextWord();
                     document.title = 'F_0 is a ';
                     if (isTabVisible) {
                         dynamicTextElement.textContent = '';
                     }
-                    pauseCounter = 0;
+                    lastUpdateTime = currentTime;
                 }
             }
         }
 
         // Use setInterval for continuous updates (works even when tab is hidden)
-        setInterval(function() {
-            if (!isDeleting && charIndex < currentText.length) {
-                updateAnimation();
-            } else if (isDeleting && charIndex > 0) {
-                updateAnimation();
-            } else {
-                updateAnimation();
-            }
-        }, 50);
+        setInterval(updateAnimation, 20);
 
         // Initialize
         currentText = getNextWord();
