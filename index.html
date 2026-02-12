@@ -102,7 +102,7 @@
             return shuffledWords.shift();
         }
 
-        function updateContent(currentTime) {
+        function typeWriter(currentTime) {
             const elapsed = currentTime - lastUpdateTime;
             
             if (!isDeleting && charIndex < currentText.length) {
@@ -136,47 +136,12 @@
                 }
             }
             
-            requestAnimationFrame(updateContent);
+            requestAnimationFrame(typeWriter);
         }
 
-        // Separate interval for title updates when page is hidden
-        setInterval(function() {
-            if (document.hidden) {
-                const currentTime = performance.now();
-                const elapsed = currentTime - lastUpdateTime;
-                
-                if (!isDeleting && charIndex < currentText.length && elapsed >= typeSpeed) {
-                    const displayText = currentText.substring(0, charIndex + 1);
-                    document.title = 'F_0 is a ' + displayText;
-                    charIndex++;
-                    lastUpdateTime = currentTime;
-                } else if (isDeleting && charIndex > 0 && elapsed >= deleteSpeed) {
-                    const displayText = currentText.substring(0, charIndex - 1);
-                    document.title = 'F_0 is a ' + displayText;
-                    charIndex--;
-                    lastUpdateTime = currentTime;
-                } else if (!isDeleting && charIndex === currentText.length && elapsed >= pauseBeforeDelete) {
-                    isDeleting = true;
-                    lastUpdateTime = currentTime;
-                } else if (isDeleting && charIndex === 0 && elapsed >= pauseBeforeType) {
-                    isDeleting = false;
-                    currentText = getNextWord();
-                    document.title = 'F_0 is a ';
-                    lastUpdateTime = currentTime;
-                }
-            } else {
-                // Sync page content when tab becomes visible
-                const currentDisplay = document.title.replace('F_0 is a ', '');
-                if (dynamicTextElement.textContent !== currentDisplay) {
-                    dynamicTextElement.textContent = currentDisplay;
-                }
-            }
-        }, 50);
-
-        // Initialize
         currentText = getNextWord();
         document.title = 'F_0 is a ';
-        requestAnimationFrame(updateContent);
+        requestAnimationFrame(typeWriter);
     </script>
 </body>
 </html>
