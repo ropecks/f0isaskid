@@ -122,8 +122,8 @@
         }
 
         .side-image {
-            max-width: 600px;
-            max-height: 900px;
+            max-width: 500px;
+            max-height: 750px;
             border-radius: 20px;
             display: block;
         }
@@ -231,8 +231,15 @@
 
         // 3D tilt effect for image container
         const imageContainer = document.querySelector('.image-container');
+        let isHovering = false;
+        
+        imageContainer.addEventListener('mouseenter', () => {
+            isHovering = true;
+        });
         
         imageContainer.addEventListener('mousemove', (e) => {
+            if (!isHovering) return;
+            
             const rect = imageContainer.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -248,6 +255,7 @@
         });
         
         imageContainer.addEventListener('mouseleave', () => {
+            isHovering = false;
             imageContainer.style.transition = 'transform 0.3s ease';
             imageContainer.style.transform = 'translateY(-50%) perspective(1000px) rotateX(0deg) rotateY(0deg)';
         });
