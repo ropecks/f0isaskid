@@ -119,6 +119,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transform-style: preserve-3d;
             perspective: 1000px;
+            display: none;
+        }
+
+        .image-container.active {
+            display: block;
         }
 
         .image-container:hover {
@@ -199,7 +204,7 @@
         <p>This website 'https://f0isaskid.xyz/' was made by Ropex, and is found on platforms like YouTube, TikTok, and Discord. This website is all about clowning a person called 'F_0' who is known for skidding other peoples Gorilla Tag mod menus and acts like he can crack.</p>
     </div>
 
-    <div class="image-container">
+    <div class="image-container active">
         <img src="icon2.png" alt="F_0" class="side-image">
     </div>
 
@@ -279,6 +284,7 @@
         const proofBtn = document.getElementById('proof-btn');
         const infoContent = document.querySelector('.info-content');
         const aboutContent = document.querySelector('.about-content');
+        const imageContainer = document.querySelector('.image-container');
 
         infoBtn.addEventListener('click', () => {
             infoBtn.classList.add('active');
@@ -286,6 +292,7 @@
             proofBtn.classList.remove('active');
             infoContent.classList.add('active');
             aboutContent.classList.remove('active');
+            imageContainer.classList.add('active');
         });
 
         aboutBtn.addEventListener('click', () => {
@@ -294,6 +301,7 @@
             proofBtn.classList.remove('active');
             aboutContent.classList.add('active');
             infoContent.classList.remove('active');
+            imageContainer.classList.remove('active');
         });
 
         proofBtn.addEventListener('click', () => {
@@ -302,10 +310,10 @@
             aboutBtn.classList.remove('active');
             infoContent.classList.remove('active');
             aboutContent.classList.remove('active');
+            imageContainer.classList.remove('active');
         });
 
         // 3D tilt effect for image container
-        const imageContainer = document.querySelector('.image-container');
         let isHovering = false;
         
         imageContainer.addEventListener('mouseenter', () => {
