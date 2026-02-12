@@ -56,6 +56,12 @@
             box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
         }
 
+        .nav-button.active {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+
         .content-container {
             position: absolute;
             top: 120px;
@@ -121,6 +127,40 @@
             transition: box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
+        .about-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(50, 50, 50, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 700px;
+            display: none;
+            z-index: 999;
+        }
+
+        .about-content.active {
+            display: block;
+        }
+
+        .about-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .info-content {
+            display: none;
+        }
+
+        .info-content.active {
+            display: block;
+        }
+
         .side-image {
             max-width: 500px;
             max-height: 750px;
@@ -140,12 +180,12 @@
 </head>
 <body>
     <div class="navbar">
-        <button class="nav-button">Info</button>
-        <button class="nav-button">About</button>
-        <button class="nav-button">Proof</button>
+        <button class="nav-button active" id="info-btn">Info</button>
+        <button class="nav-button" id="about-btn">About</button>
+        <button class="nav-button" id="proof-btn">Proof</button>
     </div>
 
-    <div class="content-container">
+    <div class="content-container info-content active">
         <div class="text-display">
             <span class="typed-text">F_0 is a <span id="dynamic-text"></span></span>
             <span class="cursor"></span>
@@ -153,6 +193,10 @@
         <div class="subheader">
             F_0 is a very large man, and is often described as one of the largest human beings on planet Earth. He's been involved in skidding Gorilla Tag mod menus, and always declines these true allegations. Check the categories on the top bar for more information.
         </div>
+    </div>
+
+    <div class="about-content">
+        <p>This website 'https://f0isaskid.xyz/' was made by Ropex, and is found on platforms like YouTube, TikTok, and Discord. This website is all about clowning a person called 'F_0' who is known for skidding other peoples Gorilla Tag mod menus and acts like he can crack.</p>
     </div>
 
     <div class="image-container">
@@ -228,6 +272,37 @@
         currentText = getNextWord();
         document.title = 'F_0 is a ';
         requestAnimationFrame(typeWriter);
+
+        // Tab switching functionality
+        const infoBtn = document.getElementById('info-btn');
+        const aboutBtn = document.getElementById('about-btn');
+        const proofBtn = document.getElementById('proof-btn');
+        const infoContent = document.querySelector('.info-content');
+        const aboutContent = document.querySelector('.about-content');
+
+        infoBtn.addEventListener('click', () => {
+            infoBtn.classList.add('active');
+            aboutBtn.classList.remove('active');
+            proofBtn.classList.remove('active');
+            infoContent.classList.add('active');
+            aboutContent.classList.remove('active');
+        });
+
+        aboutBtn.addEventListener('click', () => {
+            aboutBtn.classList.add('active');
+            infoBtn.classList.remove('active');
+            proofBtn.classList.remove('active');
+            aboutContent.classList.add('active');
+            infoContent.classList.remove('active');
+        });
+
+        proofBtn.addEventListener('click', () => {
+            proofBtn.classList.add('active');
+            infoBtn.classList.remove('active');
+            aboutBtn.classList.remove('active');
+            infoContent.classList.remove('active');
+            aboutContent.classList.remove('active');
+        });
 
         // 3D tilt effect for image container
         const imageContainer = document.querySelector('.image-container');
