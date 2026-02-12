@@ -75,15 +75,16 @@
 
     <script>
         const words = ['skid', 'paster', 'ratter', 'fatty', 'larp'];
-        let currentWordIndex = 0;
         let shuffledWords = [];
         let isDeleting = false;
         let currentText = '';
         let charIndex = 0;
+        let lastUpdateTime = 0;
         const typeSpeed = 100;
         const deleteSpeed = 50;
         const pauseBeforeDelete = 2000;
         const pauseBeforeType = 500;
+        const dynamicTextElement = document.getElementById('dynamic-text');
 
         function shuffleArray(array) {
             const newArray = [...array];
@@ -98,38 +99,43 @@
             if (shuffledWords.length === 0) {
                 shuffledWords = shuffleArray(words);
             }
-            const word = shuffledWords.shift();
-            return word;
+            return shuffledWords.shift();
         }
 
-        function typeWriter() {
-            const dynamicTextElement = document.getElementById('dynamic-text');
+        function typeWriter(currentTime) {
+            const elapsed = currentTime - lastUpdateTime;
             
             if (!isDeleting && charIndex < currentText.length) {
-                // Typing
-                dynamicTextElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-                setTimeout(typeWriter, typeSpeed);
+                if (elapsed >= typeSpeed) {
+                    dynamicTextElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                    lastUpdateTime = currentTime;
+                }
             } else if (isDeleting && charIndex > 0) {
-                // Deleting
-                dynamicTextElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(typeWriter, deleteSpeed);
+                if (elapsed >= deleteSpeed) {
+                    dynamicTextElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                    lastUpdateTime = currentTime;
+                }
             } else if (!isDeleting && charIndex === currentText.length) {
-                // Finished typing, pause before deleting
-                isDeleting = true;
-                setTimeout(typeWriter, pauseBeforeDelete);
+                if (elapsed >= pauseBeforeDelete) {
+                    isDeleting = true;
+                    lastUpdateTime = currentTime;
+                }
             } else if (isDeleting && charIndex === 0) {
-                // Finished deleting, get next word
-                isDeleting = false;
-                currentText = getNextWord();
-                setTimeout(typeWriter, pauseBeforeType);
+                if (elapsed >= pauseBeforeType) {
+                    isDeleting = false;
+                    currentText = getNextWord();
+                    lastUpdateTime = currentTime;
+                }
             }
+            
+            requestAnimationFrame(typeWriter);
         }
 
         // Initialize
         currentText = getNextWord();
-        typeWriter();
+        requestAnimationFrame(typeWriter);
     </script>
 </body>
 </html>
