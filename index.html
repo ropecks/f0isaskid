@@ -85,6 +85,7 @@
         const pauseBeforeDelete = 2000;
         const pauseBeforeType = 500;
         const dynamicTextElement = document.getElementById('dynamic-text');
+        let isTabVisible = !document.hidden;
 
         function shuffleArray(array) {
             const newArray = [...array];
@@ -102,22 +103,40 @@
             return shuffledWords.shift();
         }
 
+        // Listen for tab visibility changes
+        document.addEventListener('visibilitychange', function() {
+            isTabVisible = !document.hidden;
+            if (isTabVisible) {
+                // Sync the page content with the title when tab becomes visible
+                const currentDisplay = document.title.replace('F_0 is a ', '');
+                dynamicTextElement.textContent = currentDisplay;
+            }
+        });
+
         function typeWriter(currentTime) {
             const elapsed = currentTime - lastUpdateTime;
             
             if (!isDeleting && charIndex < currentText.length) {
                 if (elapsed >= typeSpeed) {
                     const displayText = currentText.substring(0, charIndex + 1);
-                    dynamicTextElement.textContent = displayText;
+                    // Always update title
                     document.title = 'F_0 is a ' + displayText;
+                    // Only update page content if tab is visible
+                    if (isTabVisible) {
+                        dynamicTextElement.textContent = displayText;
+                    }
                     charIndex++;
                     lastUpdateTime = currentTime;
                 }
             } else if (isDeleting && charIndex > 0) {
                 if (elapsed >= deleteSpeed) {
                     const displayText = currentText.substring(0, charIndex - 1);
-                    dynamicTextElement.textContent = displayText;
+                    // Always update title
                     document.title = 'F_0 is a ' + displayText;
+                    // Only update page content if tab is visible
+                    if (isTabVisible) {
+                        dynamicTextElement.textContent = displayText;
+                    }
                     charIndex--;
                     lastUpdateTime = currentTime;
                 }
@@ -131,6 +150,9 @@
                     isDeleting = false;
                     currentText = getNextWord();
                     document.title = 'F_0 is a ';
+                    if (isTabVisible) {
+                        dynamicTextElement.textContent = '';
+                    }
                     lastUpdateTime = currentTime;
                 }
             }
